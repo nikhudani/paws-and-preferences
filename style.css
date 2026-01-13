@@ -1,19 +1,7 @@
-body {
-  font-family: system-ui, sans-serif;
-  text-align: center;
-  background: #f8f8f8;
-  margin: 0;
-  padding: 20px;
-}
-
-h1 {
-  margin-bottom: 20px;
-}
-
 #card-container {
   position: relative;
-  width: 300px;
-  height: 400px;
+  width: 320px;
+  height: 420px;
   margin: auto;
 }
 
@@ -21,11 +9,35 @@ h1 {
   position: absolute;
   width: 100%;
   height: 100%;
-  border-radius: 12px;
+  border-radius: 18px;
   background-size: cover;
   background-position: center;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
   touch-action: pan-y;
+}
+
+.label {
+  position: absolute;
+  top: 20px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background: #ffffffcc;
+}
+
+.like {
+  left: 20px;
+  color: #198754;
+  border: 2px solid #198754;
+}
+
+.nope {
+  right: 20px;
+  color: #dc3545;
+  border: 2px solid #dc3545;
 }
 
 .hidden {
@@ -33,7 +45,7 @@ h1 {
 }
 
 #liked-cats img {
-  width: 100px;
-  margin: 5px;
-  border-radius: 8px;
+  width: 90px;
+  margin: 6px;
+  border-radius: 12px;
 }
