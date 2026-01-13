@@ -1,10 +1,11 @@
 const container = document.getElementById("card-container");
+const template = document.getElementById("card-template");
 const summary = document.getElementById("summary");
 const likeCount = document.getElementById("like-count");
 const likedCatsDiv = document.getElementById("liked-cats");
 
 const TOTAL_CATS = 10;
-let currentIndex = 0;
+let index = 0;
 let likedCats = [];
 
 const cats = Array.from({ length: TOTAL_CATS }, () =>
@@ -12,12 +13,16 @@ const cats = Array.from({ length: TOTAL_CATS }, () =>
 );
 
 function createCard(imageUrl) {
-  const card = document.createElement("div");
-  card.className = "card";
+  const card = template.cloneNode(true);
+  card.classList.remove("hidden");
+  card.removeAttribute("id");
   card.style.backgroundImage = `url(${imageUrl})`;
 
+  const likeLabel = card.querySelector(".like");
+  const nopeLabel = card.querySelector(".nope");
+
   let startX = 0;
-  let currentX = 0;
+  let moveX = 0;
 
   card.addEventListener("pointerdown", e => {
     startX = e.clientX;
@@ -26,37 +31,49 @@ function createCard(imageUrl) {
 
   card.addEventListener("pointermove", e => {
     if (!startX) return;
-    currentX = e.clientX - startX;
-    card.style.transform = `translateX(${currentX}px) rotate(${currentX / 10}deg)`;
+
+    moveX = e.clientX - startX;
+    card.style.transform = `translateX(${moveX}px) rotate(${moveX / 15}deg)`;
+
+    likeLabel.style.opacity = moveX > 0 ? Math.min(moveX / 100, 1) : 0;
+    nopeLabel.style.opacity = moveX < 0 ? Math.min(-moveX / 100, 1) : 0;
   });
 
   card.addEventListener("pointerup", () => {
-    if (currentX > 100) likeCard(imageUrl);
-    else if (currentX < -100) dislikeCard();
-    else card.style.transform = "";
+    if (moveX > 120) {
+      likedCats.push(imageUrl);
+      swipeOut(card, 1);
+    } else if (moveX < -120) {
+      swipeOut(card, -1);
+    } else {
+      resetCard(card, likeLabel, nopeLabel);
+    }
+
     startX = 0;
   });
 
   return card;
 }
 
-function likeCard(imageUrl) {
-  likedCats.push(imageUrl);
-  nextCard();
+function swipeOut(card, direction) {
+  card.style.transform = `translateX(${direction * 500}px) rotate(${direction * 30}deg)`;
+  setTimeout(showNext, 300);
 }
 
-function dislikeCard() {
-  nextCard();
+function resetCard(card, likeLabel, nopeLabel) {
+  card.style.transform = "";
+  likeLabel.style.opacity = 0;
+  nopeLabel.style.opacity = 0;
 }
 
-function nextCard() {
+function showNext() {
   container.innerHTML = "";
-  currentIndex++;
+  index++;
 
-  if (currentIndex >= cats.length) {
+  if (index >= cats.length) {
     showSummary();
   } else {
-    container.appendChild(createCard(cats[currentIndex]));
+    container.appendChild(createCard(cats[index]));
   }
 }
 
