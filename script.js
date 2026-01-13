@@ -19,7 +19,7 @@ function createCard(imageUrl) {
   card.style.backgroundImage = `url(${imageUrl})`;
 
   const likeLabel = card.querySelector(".like");
-  const nopeLabel = card.querySelector(".nope");
+  const dislikeLabel = card.querySelector(".dislike");
 
   let startX = 0;
   let moveX = 0;
@@ -36,7 +36,7 @@ function createCard(imageUrl) {
     card.style.transform = `translateX(${moveX}px) rotate(${moveX / 15}deg)`;
 
     likeLabel.style.opacity = moveX > 0 ? Math.min(moveX / 100, 1) : 0;
-    nopeLabel.style.opacity = moveX < 0 ? Math.min(-moveX / 100, 1) : 0;
+    dislikeLabel.style.opacity = moveX < 0 ? Math.min(-moveX / 100, 1) : 0;
   });
 
   card.addEventListener("pointerup", () => {
@@ -46,7 +46,7 @@ function createCard(imageUrl) {
     } else if (moveX < -120) {
       swipeOut(card, -1);
     } else {
-      resetCard(card, likeLabel, nopeLabel);
+      resetCard(card, likeLabel, dislikeLabel);
     }
 
     startX = 0;
@@ -60,10 +60,10 @@ function swipeOut(card, direction) {
   setTimeout(showNext, 300);
 }
 
-function resetCard(card, likeLabel, nopeLabel) {
+function resetCard(card, likeLabel, dislikeLabel) {
   card.style.transform = "";
   likeLabel.style.opacity = 0;
-  nopeLabel.style.opacity = 0;
+  dislikeLabel.style.opacity = 0;
 }
 
 function showNext() {
